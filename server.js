@@ -2,7 +2,9 @@
 const { errorHandler } = require('./middlewares/errorMiddleware');
 const connectDB = require('./config/db');
 const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
+
 
 const app = express();
 
@@ -25,6 +27,7 @@ const tasksRoute = require('./routes/tasks');
 
 /* Middle wares */
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(errorHandler);
 app.use('/tasky/projects', projectsRoute);
