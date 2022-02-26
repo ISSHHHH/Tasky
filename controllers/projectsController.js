@@ -23,14 +23,14 @@ const getProject = asyncHandler(async(req, res) => {
     if (project) {
 
         if (project.user.toString() !== req.user.id) {
-            res.status(403);
+            res.status(403).json({ message: "Sorry not your property :)" });;
             throw new Error("Sorry not your property :)");
         }
 
         res.status(200).json(project);
 
     } else {
-        res.status(400);
+        res.status(400).json({ message: "Project doesn't exist" });
         throw new Error("Project doesn't exist");
     }
 });
@@ -72,11 +72,11 @@ const createProject = asyncHandler(async(req, res) => {
             if (newProject) {
                 res.status(200).json(newProject);
             } else {
-                res.status(500);
+                res.status(500).json({ message: "Sorry couldn't create project" });
                 throw new Error("Sorry couldn't create project");
             }
         } else {
-            res.status(500);
+            res.status(500).json({ message: "Sorry couldn't create project" });
             throw new Error("Sorry couldn't create project");
         }
 
