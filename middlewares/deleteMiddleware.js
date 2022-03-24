@@ -7,11 +7,9 @@ const asyncHandler = require('express-async-handler');
 const deleteAllBoards = asyncHandler(async(project_id, res) => {
     try {
         await Board.deleteMany({ project: project_id });
-        res.status(200).json({ message: "Boards deleted successfully!!" });
     } catch (error) {
         console.log(error);
         res.status(400);
-        throw new Error("couldn't delete boards");
     }
 });
 
@@ -19,11 +17,9 @@ const deleteAllBoards = asyncHandler(async(project_id, res) => {
 const deleteTask = asyncHandler(async(board_id, res) => {
     try {
         await Task.deleteMany({ board: board_id });
-        res.status(200).status("Task deleted");
     } catch (error) {
         console.log(error);
         res.status(400);
-        throw new Error("couldn't delete task");
     }
 });
 

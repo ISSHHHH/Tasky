@@ -121,11 +121,11 @@ const deleteBoard = asyncHandler(async(req, res) => {
 
     // Check if project belongs to user
     if (!checkIsValid(req, project_id)) {
-        res.status(400);
+        res.status(400).json({ message: "Invalid Project" });
         throw new Error("Invalid project");
     }
     if (!board_id) {
-        res.status(400);
+        res.status(400).json({ message: "Fucked again" });
         throw new Error("Fucked again");
     }
 
@@ -133,9 +133,11 @@ const deleteBoard = asyncHandler(async(req, res) => {
     try {
         deleteTask(board_id, res);
         await Board.findByIdAndDelete(board_id);
+        res.status(200).json({ message: "Board Deleted" });
+
     } catch (error) {
         console.log(error);
-        res.status(400);
+        res.status(400).json({ message: "Couldn't delete Board" });
         throw new Error("Couldn't delete Board");
     }
 });

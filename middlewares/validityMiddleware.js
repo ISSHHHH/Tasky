@@ -9,7 +9,7 @@ const checkIsValid = asyncHandler(async(req, project_id) => {
     }
 
     const project = await Project.findById(project_id);
-    return project && project.user.toString() !== req.user.id;
+    return project && project.user.toString() === req.user.id.toString();
 });
 
 module.exports = { checkIsValid };

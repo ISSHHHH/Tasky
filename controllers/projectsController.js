@@ -97,28 +97,31 @@ const updateProject = asyncHandler(async(req, res) => {
 
     //Check if project exists
     if (!project) {
-        res.status(400);
+        res.status(400).json({ message: "This project doesn't exist" });
         throw new Error("This project doesn't exist");
     }
 
     //Check if project belongs to user
     if (project.user.toString() !== req.user.id) {
-        res.status(403);
+        res.status(403).json({ message: "Sorry not your property :)" });
         throw new Error("Sorry not your property :)");
     }
 
     //Update project
-    project.title = req.body.title;
-    project.description = req.body.description;
+    const { title, description } = req.body;
+    if (!title || !description) {
+        res.status(400).json({ message: "invalid data" });
+        throw new Error("invalid data");
+    }
 
     try {
-        await Project.findOneAndUpdate(id, project);
-        const updateProject = await Project.findById(id);
+        await Project.findByIdAndUpdate(id, { title, description });
+        const updatedProject = await Project.findById(id);
+        res.status(200).json(updatedProject);
 
-        res.status(200).json(updateProject);
     } catch (error) {
         console.log(error);
-        res.status(400);
+        res.status(400).json({ message: "Sorry Couldn't update project :(" });
         throw new Error("Sorry Couldn't update project :( ")
     }
 
@@ -133,13 +136,13 @@ const deleteProject = asyncHandler(async(req, res) => {
 
     //Check if project exists
     if (!project) {
-        res.status(400);
+        res.status(400).json({ message: "This project doesn't exist" });
         throw new Error("This project doesn't exist");
     }
 
     //Check if project belongs to user
     if (project.user.toString() !== req.user.id) {
-        res.status(403);
+        res.status(403).json({ message: "Sorry not your property :)" });;
         throw new Error("Sorry not your property :)");
     }
 
@@ -154,7 +157,9 @@ const deleteProject = asyncHandler(async(req, res) => {
         });
     } catch (error) {
         console.log(error);
-        res.status(400);
+        res.status(400).json({
+            message: "couldn't delete Project"
+        });
         throw new Error("couldn't delete Project");
     }
 });
